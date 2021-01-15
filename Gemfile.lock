@@ -1,0 +1,55 @@
+PATH
+  remote: .
+  specs:
+    application_utilities (0.0.2)
+      activemodel (~> 4.2.6)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    activemodel (4.2.11.3)
+      activesupport (= 4.2.11.3)
+      builder (~> 3.1)
+    activesupport (4.2.11.3)
+      i18n (~> 0.7)
+      minitest (~> 5.1)
+      thread_safe (~> 0.3, >= 0.3.4)
+      tzinfo (~> 1.1)
+    builder (3.2.4)
+    byebug (11.0.1)
+    concurrent-ruby (1.1.7)
+    diff-lcs (1.4.4)
+    i18n (0.9.5)
+      concurrent-ruby (~> 1.0)
+    minitest (5.14.1)
+    rake (10.5.0)
+    rspec (3.5.0)
+      rspec-core (~> 3.5.0)
+      rspec-expectations (~> 3.5.0)
+      rspec-mocks (~> 3.5.0)
+    rspec-core (3.5.4)
+      rspec-support (~> 3.5.0)
+    rspec-expectations (3.5.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.5.0)
+    rspec-mocks (3.5.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.5.0)
+    rspec-support (3.5.0)
+    thread_safe (0.3.6)
+    tzinfo (1.2.7)
+      thread_safe (~> 0.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  activemodel (~> 4.2.6)
+  bundler (~> 1.15)
+  byebug (~> 11.0.1)
+  rake (~> 10.0)
+  rspec (~> 3.5.0)
+  application_utilities!
+
+BUNDLED WITH
+   1.17.3
