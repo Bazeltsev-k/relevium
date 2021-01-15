@@ -85,6 +85,19 @@ RSpec.describe ApplicationUtilities::Form do
     expect(result_hash[:test3]).to eq 'qwe'
   end
 
+  it 'should serialize relation' do
+    model1 = OpenStruct.new(attributes: { test: '12', test2: 'test2' })
+    model2 = OpenStruct.new(attributes: { test2: 'test2', test3: 'T' })
+    relation_arr = TestForm.serialize_relation([model1, model2])
+    expect(relation_arr[0][:test]).to be nil
+    expect(relation_arr[0][:combine_tests]).to eq '12 - test2'
+    expect(relation_arr[0][:test3]).to eq 'qwe'
+    expect(relation_arr[0][:test2]).to eq 'test2'
+    expect(relation_arr[1][:combine_tests]).to eq ' - test2'
+    expect(relation_arr[1][:test2]).to eq 'test2'
+    expect(relation_arr[1][:test3]).to eq 'qwe'
+  end
+
   it 'should build form from model' do
     form_2 = TestForm.from_model(OpenStruct.new(attributes: { test: '12', test2: 'test2' }))
     expect(form_2.test).to eq 12

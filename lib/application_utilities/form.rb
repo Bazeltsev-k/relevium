@@ -97,6 +97,10 @@ module ApplicationUtilities
       @attributes_to_serialize ||= []
     end
 
+    def self.serialize_relation(relation)
+      relation.map { |model| from_model(model).serialize }
+    end
+
     class Boolean; end
   end
 
