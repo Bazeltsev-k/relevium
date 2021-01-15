@@ -62,6 +62,10 @@ module ApplicationUtilities
       errors.full_messages.to_sentence
     end
 
+    def self.i18n_scope
+      :activerecord
+    end
+
     private
 
     def set_attribute(attribute, value)
