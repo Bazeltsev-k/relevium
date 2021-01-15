@@ -1,8 +1,8 @@
 PATH
   remote: .
   specs:
-    application_utilities (0.0.2)
-      activemodel (~> 4.2.6)
+    application_utilities (0.0.1)
+      activemodel (>= 4.2.6)
 
 GEM
   remote: https://rubygems.org/
@@ -44,12 +44,12 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  activemodel (~> 4.2.6)
-  bundler (~> 1.15)
-  byebug (~> 11.0.1)
-  rake (~> 10.0)
-  rspec (~> 3.5.0)
+  activemodel (>= 4.2.6)
   application_utilities!
+  bundler (>= 1.15)
+  byebug (>= 11.0.1)
+  rake (>= 10.0)
+  rspec (>= 3.5.0)
 
 BUNDLED WITH
    1.17.3
