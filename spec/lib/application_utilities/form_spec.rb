@@ -2,16 +2,23 @@
 
 require 'spec_helper'
 require 'application_utilities/form'
+require 'ostruct'
 
 class TestForm < ApplicationUtilities::Form
   attribute :test, Integer
   attribute :test2, String, remove_from_hash: true
+  attribute :test3, String, remove_from_hash: true
   include_in_hash :combine_tests
+  serialize_attributes :test2, :combine_tests, :test3
 
   validates :test, presence: true
 
   def combine_tests
     "#{test} - #{test2}"
+  end
+
+  def test3
+    'qwe'
   end
 end
 
@@ -62,5 +69,19 @@ RSpec.describe ApplicationUtilities::Form do
     form.set_attributes(test: 15, test2: 'qwe')
     expect(form.test).to eq 15
     expect(form.test2).to eq 'qwe'
+  end
+
+  it 'should serialize attributes' do
+    form_2 = TestForm.new(test3: 'test3')
+    result_hash = form_2.serialize
+    expect(result_hash[:test2]).to be_nil
+    expect(result_hash[:combine_tests]).to eq ' - '
+    expect(result_hash[:test3]).to eq 'qwe'
+  end
+
+  it 'should build form from model' do
+    form_2 = TestForm.from_model(OpenStruct.new(attributes: { test: '12', test2: 'test2' }))
+    expect(form_2.test).to eq 12
+    expect(form_2.test2).to eq 'test2'
   end
 end

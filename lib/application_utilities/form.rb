@@ -8,15 +8,14 @@ module ApplicationUtilities
     include ActiveModel::Model
 
     def initialize(hash)
-      hash.keys.each do |key|
-        attribute = self.class.attributes.find { |attr| attr.attribute_name == key.to_sym }
-        set_attribute(attribute, hash[key]) if attribute.present?
-      end
+      set_attributes(hash)
       self
     end
 
     def self.from_model(model)
-      new(model.try(:attributes))
+      new(model.attributes)
+    rescue StandardError => _e
+      nil
     end
 
     def to_h
@@ -24,12 +23,21 @@ module ApplicationUtilities
       self.instance_variables.each do |var|
         var_name = var.to_s.delete('@')
         attribute = self.class.attributes.find { |attr| attr.attribute_name == var_name.to_sym }
-        hash[var_name] = self.instance_variable_get(var) if attribute&.remove_from_hash == false
+        hash[var_name] = instance_variable_get(var) if attribute&.remove_from_hash == false
       end
       self.class.methods_for_hash.each do |method|
         hash[method] = self.send(method)
       end
-      hash.default_proc = proc{|h, k| h.key?(k.to_s) ? h[k.to_s] : nil}
+      hash.default_proc = proc { |h, k| h.key?(k.to_s) ? h[k.to_s] : nil }
+      hash
+    end
+
+    def serialize
+      hash = {}
+      self.class.attributes_to_serialize.each do |attribute|
+        hash[attribute] = self.send(attribute) rescue instance_variable_get("@#{attribute}")
+      end
+      hash.default_proc = proc { |h, k| h.key?(k.to_s) ? h[k.to_s] : nil }
       hash
     end
 
@@ -77,10 +85,12 @@ module ApplicationUtilities
       @methods_for_hash ||= []
     end
 
-    def self.human_attribute_name(attr, options = {})
-      I18n.t "activerecord.attributes.#{self.name.underscore.to_sym}.#{attr}", raise: true
-    rescue StandardError => e
-      super
+    def self.serialize_attributes(*attributes)
+      @attributes_to_serialize = attributes
+    end
+
+    def self.attributes_to_serialize
+      @attributes_to_serialize ||= []
     end
   end
 
