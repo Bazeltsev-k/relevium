@@ -92,6 +92,8 @@ module ApplicationUtilities
     def self.attributes_to_serialize
       @attributes_to_serialize ||= []
     end
+
+    class Boolean; end
   end
 
   class Attribute
@@ -117,7 +119,7 @@ module ApplicationUtilities
     end
 
     def cast_value_to_type(value)
-      return TRUE_VALUES.include?(value) if type == Boolean
+      return TRUE_VALUES.include?(value) if type == ::ApplicationUtilities::Form::Boolean
       return method(type.to_s).call(value) unless DATE_TYPES.include?(type)
 
       value.send("to_#{type.to_s.underscore}")
@@ -127,6 +129,4 @@ module ApplicationUtilities
       "@#{attribute_name}"
     end
   end
-
-  class Boolean; end
 end

@@ -8,6 +8,7 @@ class TestForm < ApplicationUtilities::Form
   attribute :test, Integer
   attribute :test2, String, remove_from_hash: true
   attribute :test3, String, remove_from_hash: true
+  attribute :bool, Boolean, remove_from_hash: true
   include_in_hash :combine_tests
   serialize_attributes :test2, :combine_tests, :test3
 
@@ -37,6 +38,11 @@ RSpec.describe ApplicationUtilities::Form do
 
   it "should set nil if can't convert attributes" do
     expect(TestForm.new(test: 'test').test).to be_nil
+  end
+
+  it 'should work with boolean' do
+    form_2 = TestForm.new(bool: 'false')
+    expect(form_2.bool).to be false
   end
 
   it 'should produce hash of attributes' do
