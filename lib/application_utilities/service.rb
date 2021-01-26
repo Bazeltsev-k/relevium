@@ -12,28 +12,46 @@ module ApplicationUtilities
 
     def initialize(*args); end
 
-    def broadcast(name, *args)
-      local_registrations.select { |registration| registration.listener == name }.first&.broadcast(*args)
-      self.class.global_registrations.select { |registration| registration.message == name }
-                                    &.each { |listener| listener.broadcast(*args) }
+    def on(name, &block)
+      local_registrations << BlockRegistration.new(name, block)
       self
+    end
+
+    private
+
+    def broadcast(name, *args)
+      set_off_local_listeners(name, *args)
+      set_off_global_listeners(name, *args)
+      self
+    end
+
+    def set_off_local_listeners(name, *args)
+      local_registrations.select { |registration| registration.listener == name }.first&.broadcast(*args)
+    end
+
+    def set_off_global_listeners(name, *args)
+      registrations = self.class.global_registrations.select { |registration| registration.message == name }
+      registrations.each do |registration|
+        next unless registration.condition.nil? || registration.condition.call(self)
+
+        registration.args.nil? ? registration.broadcast(*args) : registration.broadcast(*get_args(*registration.args))
+      end
+    end
+
+    def get_args(*args)
+      args.map { |arg| instance_variable_get("@#{arg}") }
     end
 
     def transaction(&block)
       ActiveRecord::Base.transaction(&block) if block_given?
     end
 
-    def on(name, &block)
-      local_registrations << BlockRegistration.new(name, block)
-      self
-    end
-
     def local_registrations
       @local_registrations ||= Set.new
     end
 
-    def self.set_listener(klass, message, function_name)
-      global_registrations << GlobalRegistration.new(klass, message, function_name)
+    def self.set_listener(klass, message, options = {})
+      global_registrations << GlobalRegistration.new(klass, message, options)
     end
 
     def self.global_registrations
@@ -59,11 +77,13 @@ module ApplicationUtilities
   end
 
   class GlobalRegistration < BlockRegistration
-    attr_reader :function
+    attr_reader :function, :condition, :args
 
-    def initialize(listener, message, function)
+    def initialize(listener, message, options = {})
       super(listener, message)
-      @function = function
+      @function = options[:function] || 'call'
+      @condition = options[:if]
+      @args = options[:args]
     end
 
     def broadcast(*args)
@@ -71,9 +91,8 @@ module ApplicationUtilities
     end
 
     def validate!
-      return if [String, Symbol].include?(function.class)
-
-      raise "Invalid function name. Expected symbol or string, got #{function.class}"
+      raise 'Invalid function name for listener' unless [String, Symbol].include?(function.class)
+      raise 'Invalid condition for listener' unless condition.is_a?(Proc)
     end
   end
 end
