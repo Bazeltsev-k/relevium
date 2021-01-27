@@ -11,7 +11,7 @@ class TestWorkerService < ApplicationUtilities::BackgroundService
   attr_reader :worker_attr, :worker_attr2
   worker_attributes :worker_attr, :worker_attr2
 
-  def initialize(worker_attr, worker_attr2)
+  def initialize(worker_attr, worker_attr2, options = nil)
     super({background: true, perform_in: 15}, TestWorker)
     @worker_attr = worker_attr
     @worker_attr2 = worker_attr2
@@ -39,6 +39,11 @@ RSpec.describe ApplicationUtilities::BackgroundService do
   it 'should setup worker if background options given' do
     expect(TestWorker).to receive(:perform_in).with(15, described_class)
     described_class.call({background: true, perform_in: 15}, TestWorker)
+  end
+
+  it 'should not setup worker if background option false' do
+    expect(TestWorker).not_to receive(:perform_in)
+    described_class.call({background: false, perform_in: 15}, TestWorker)
   end
 
   it 'should set worker with worker attributes' do

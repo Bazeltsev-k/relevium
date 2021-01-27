@@ -46,7 +46,7 @@ module ApplicationUtilities
     end
 
     def background?
-      !options[:background].nil?
+      !options[:background].nil? && options[:background]
     end
 
     def valid?
