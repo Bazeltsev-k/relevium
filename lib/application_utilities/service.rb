@@ -30,7 +30,9 @@ module ApplicationUtilities
     end
 
     def set_off_global_listeners(name, *args)
-      registrations = self.class.global_registrations.select { |registration| registration.message == name }
+      select_proc = Proc.new { |registration| registration.message == name }
+      registrations = self.class.global_registrations.select(&select_proc)
+      registrations += self.class.superclass&.global_registrations&.select(&select_proc)
       registrations.each do |registration|
         next unless registration.condition.nil? || registration.condition.call(self)
 

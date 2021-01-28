@@ -56,6 +56,8 @@ class TestService < ApplicationUtilities::Service
   end
 end
 
+class ChildService < TestService; end
+
 RSpec.describe ApplicationUtilities::Service do
   let(:allow_call) { allow_any_instance_of(described_class).to receive(:call) }
 
@@ -111,5 +113,10 @@ RSpec.describe ApplicationUtilities::Service do
     expect_any_instance_of(TestListener).not_to receive(:test_function)
     expect_any_instance_of(TestListener2).to receive(:test_function).with('test')
     TestService.call('test', 'zxc')
+  end
+
+  it 'should call global listeners from super class' do
+    expect_any_instance_of(TestListener2).to receive(:test_function).with('test')
+    ChildService.call('test', 'zxc')
   end
 end
