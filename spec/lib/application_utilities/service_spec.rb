@@ -27,11 +27,14 @@ class TestListener2 < ApplicationUtilities::Service
 
   def call
     test_function(@test)
+    test_whisperer(@whisperer)
   end
 
   def on_fail; end
 
   private
+
+  def test_whisperer(_); end
 
   def test_function(_); end
 end
@@ -118,5 +121,10 @@ RSpec.describe ApplicationUtilities::Service do
   it 'should call global listeners from super class' do
     expect_any_instance_of(TestListener2).to receive(:test_function).with('test')
     ChildService.call('test', 'zxc')
+  end
+
+  it 'should set whisperer variable to listener' do
+    expect_any_instance_of(TestListener2).to receive(:test_whisperer).with(TestService)
+    TestService.call('test', 'zxc')
   end
 end

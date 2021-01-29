@@ -53,7 +53,7 @@ module ApplicationUtilities
     end
 
     def self.set_listener(klass, message, options = {})
-      global_registrations << GlobalRegistration.new(klass, message, options)
+      global_registrations << GlobalRegistration.new(klass, message, options, self)
     end
 
     def self.global_registrations
@@ -79,17 +79,20 @@ module ApplicationUtilities
   end
 
   class GlobalRegistration < BlockRegistration
-    attr_reader :function, :condition, :args
+    attr_reader :function, :condition, :args, :whisperer
 
-    def initialize(listener, message, options = {})
+    def initialize(listener, message, options = {}, whisperer = nil)
       super(listener, message)
       @function = options[:function] || 'call'
       @condition = options[:if]
       @args = options[:args]
+      @whisperer = whisperer
     end
 
     def broadcast(*args)
-      listener.new(*args).send(function)
+      listener_obj = listener.new(*args)
+      listener_obj.instance_variable_set('@whisperer', whisperer)
+      listener_obj.send(function)
     end
 
     def validate!
