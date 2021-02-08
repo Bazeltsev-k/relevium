@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "application_utilities/version"
+require "relevium/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = "application_utilities"
-  spec.version       = ApplicationUtilities::VERSION
+  spec.name          = "relevium"
+  spec.version       = Relevium::VERSION
   spec.authors       = ['Bazeltsev Kirill']
   spec.email         = ['kirill.bazeltsev@flender.ie']
 

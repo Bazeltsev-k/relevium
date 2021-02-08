@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require 'application_utilities/service'
+require 'relevium/service'
 
-class TestListener < ApplicationUtilities::Service
+class TestListener < Relevium::Service
   def initialize(test, test2)
     @test = test
     @test2 = test2
@@ -20,7 +20,7 @@ class TestListener < ApplicationUtilities::Service
   def test_function(_, _); end
 end
 
-class TestListener2 < ApplicationUtilities::Service
+class TestListener2 < Relevium::Service
   def initialize(test)
     @test = test
   end
@@ -39,7 +39,7 @@ class TestListener2 < ApplicationUtilities::Service
   def test_function(_); end
 end
 
-class TestService < ApplicationUtilities::Service
+class TestService < Relevium::Service
   set_listener ::TestListener, :ok, function: :on_ok, args: %i[test test2], if: Proc.new { |service| service.test2 == 'qwe' }
   set_listener ::TestListener2, :ok
   set_listener ::TestListener, :fail, function: :on_fail, args: %i[test test2]
@@ -61,7 +61,7 @@ end
 
 class ChildService < TestService; end
 
-RSpec.describe ApplicationUtilities::Service do
+RSpec.describe Relevium::Service do
   let(:allow_call) { allow_any_instance_of(described_class).to receive(:call) }
 
   it 'should create new instance of class' do
@@ -80,7 +80,7 @@ RSpec.describe ApplicationUtilities::Service do
   end
 
   it 'should set local listeners' do
-    expect(ApplicationUtilities::BlockRegistration).to receive(:new).and_call_original
+    expect(Relevium::BlockRegistration).to receive(:new).and_call_original
     allow_call
     described_class.call('test') do |obj|
       obj.on(:ok) { 'test' }

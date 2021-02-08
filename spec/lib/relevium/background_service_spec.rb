@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require 'application_utilities/background_service'
+require 'relevium/background_service'
 
 class TestWorker
   def self.perform_in(_delay, _class, _attributes); end
 end
 
-class TestWorkerService < ApplicationUtilities::BackgroundService
+class TestWorkerService < Relevium::BackgroundService
   attr_reader :worker_attr, :worker_attr2
   worker_attributes :worker_attr, :worker_attr2
 
@@ -18,7 +18,7 @@ class TestWorkerService < ApplicationUtilities::BackgroundService
   end
 end
 
-RSpec.describe ApplicationUtilities::BackgroundService do
+RSpec.describe Relevium::BackgroundService do
   let(:allow_perform) { allow_any_instance_of(described_class).to receive(:perform) }
 
   it 'should initialize new instance of class' do

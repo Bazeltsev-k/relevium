@@ -2,7 +2,7 @@
 
 require 'byebug'
 
-module ApplicationUtilities
+module Relevium
   class Service
     def self.call(*args)
       obj = new(*args)

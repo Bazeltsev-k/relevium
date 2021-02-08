@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require 'application_utilities/form'
+require 'relevium/form'
 require 'ostruct'
 
-class TestForm < ApplicationUtilities::Form
+class TestForm < Relevium::Form
   attribute :test, Integer
   attribute :test2, String, remove_from_hash: true
   attribute :test3, String, remove_from_hash: true
@@ -23,12 +23,12 @@ class TestForm < ApplicationUtilities::Form
   end
 end
 
-RSpec.describe ApplicationUtilities::Form do
+RSpec.describe Relevium::Form do
   let(:hash) { { test: '12', test2: 'test2' } }
   let(:form) { TestForm.new(hash) }
 
   it 'should initialize new instance of form' do
-    expect(form.is_a?(ApplicationUtilities::Form)).to be true
+    expect(form.is_a?(Relevium::Form)).to be true
   end
 
   it 'should set attributes types' do

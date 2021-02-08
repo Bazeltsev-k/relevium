@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    application_utilities (0.0.1)
+    relevium (0.0.1)
       activemodel (>= 4.2.6)
 
 GEM
@@ -45,10 +45,10 @@ PLATFORMS
 
 DEPENDENCIES
   activemodel (>= 4.2.6)
-  application_utilities!
   bundler (>= 1.15)
   byebug (>= 11.0.1)
   rake (>= 10.0)
+  relevium!
   rspec (>= 3.5.0)
 
 BUNDLED WITH

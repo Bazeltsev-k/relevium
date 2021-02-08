@@ -3,7 +3,7 @@
 require 'date'
 require 'active_model'
 
-module ApplicationUtilities
+module Relevium
   class Form
     include ActiveModel::Model
 
@@ -127,7 +127,7 @@ module ApplicationUtilities
     end
 
     def cast_value_to_type(value)
-      return TRUE_VALUES.include?(value) if type == ::ApplicationUtilities::Form::Boolean
+      return TRUE_VALUES.include?(value) if type == ::Relevium::Form::Boolean
       return method(type.to_s).call(value) unless DATE_TYPES.include?(type)
 
       value.send("to_#{type.to_s.underscore}")

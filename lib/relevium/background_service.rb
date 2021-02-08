@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'application_utilities/service'
+require 'relevium/service'
 
-module ApplicationUtilities
+module Relevium
   class BackgroundService < Service
     attr_reader :options, :worker_class
 
