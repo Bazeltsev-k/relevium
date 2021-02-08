@@ -1,4 +1,5 @@
 # Relevium
+![Gem](https://img.shields.io/gem/v/relevium) ![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability/Bazeltsev-k/relevium)
 
 #### Simple ruby gem for rails projects with some useful patterns that would help you build more scalable apps
 
