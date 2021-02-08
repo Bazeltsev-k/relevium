@@ -2,15 +2,17 @@
 
 #### Simple ruby gem for rails projects with some useful patterns that would help you build more scalable apps
 
-## Table of contents
+## Table of contents <a name='table-of-contents'></a>
 1. [Service object](#service-object)
-2. [Listeners](#listeners)
-3. [Background service](#background-service)
-4. [Form object](#form)
+   1. [Listeners](#listeners)
+2. [Background service](#background-service)
+3. [Form object](#form)
     1. [Serialization with forms](#form)
 
 
 ## Service object <a name='service-object'></a>
+[To the start](#table-of-contents)
+
 Interface for running services - a place to move your business logic.
 
 Example:
@@ -70,6 +72,7 @@ end
 ```
 
 ### Adding listeners <a name='listeners'></a>
+[To the start](#table-of-contents)
 
 Example:
 ```ruby
@@ -213,6 +216,7 @@ TestService.call(User.last.id)
 ```
 
 ## Background service <a name='background-service'></a>
+[To the start](#table-of-contents)
 
 Simple interface for running background jobs as services.
 Meant to be inherited like this:
@@ -264,6 +268,8 @@ SimpleService.call('foo', background: true, perform_in: 15.minutes)
 Note that listeners won't work when service is being called as background job.
 
 ## Form object <a name='form'></a>
+[To the start](#table-of-contents)
+
 Form object is used to move validations from models. Usually used when similar model needs different validations on
 different forms. Can be used to build attributes for model to save.
 
@@ -313,6 +319,8 @@ form.to_h # { user_id: 2, user_name: 'Stan', sibling_name: 'Ken' }
 ```
 ---
 ### Serialization with forms <a name='serialization'></a>
+[To the start](#table-of-contents)
+
 ```ruby
 class UserForm < Relevium::Form
   attribute :available_cash, Float
